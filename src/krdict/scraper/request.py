@@ -4,7 +4,7 @@ Handles making requests to the dictionary website.
 
 from os import path
 import requests
-from lxml import html
+import xml.etree.ElementTree as ET
 from .constants import _VIEW_URL
 from ..types import (
     isiterable,
@@ -880,7 +880,7 @@ def send_scrape_request(url):
     try:
         response = requests.get(url, headers={'Accept-Language': '*'})
         response.raise_for_status()
-        return html.fromstring(response.text)
+        return ET.fromstring(response.text)
     except requests.exceptions.RequestException as exc:
         raise exc
 
@@ -933,6 +933,6 @@ def send_multimedia_request(kwargs):
     try:
         response = requests.get(url, headers={'Accept-Language': '*'})
         response.raise_for_status()
-        return html.fromstring(response.text)
+        return ET.fromstring(response.text)
     except requests.exceptions.RequestException as exc:
         raise exc

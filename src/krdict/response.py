@@ -4,7 +4,7 @@ type conversion, and restructuring.
 """
 
 from collections import deque
-from lxml import etree
+import xml.etree.ElementTree as ET
 from .types import (
     DefinitionResponse,
     ErrorResponse,
@@ -48,15 +48,14 @@ _CONVERT_NUM = [
 
 def _parse_xml(xml):
     result = {}
-    root = etree.fromstring(xml.encode('utf-8'), None) # pylint: disable=c-extension-no-member
-
+    root = ET.fromstring(xml.encode('utf-8'), None) # pylint: disable=c-extension-no-member
     stack = deque()
     stack.append((root, result))
 
     while len(stack) > 0:
         node, children = stack.pop()
 
-        for child in node.iterchildren():
+        for child in node.findall('.//*'):
             key = child.tag
             value = child.text and child.text.strip()
 
